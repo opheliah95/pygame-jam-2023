@@ -1,17 +1,22 @@
 import pygame
 from pygame.locals import *
+import sys,os
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-BLUE = (3, 41, 63)
-FPS = 60
+dir = f"{os.getcwd()}/lib"
+
+if os.listdir(dir): 
+    sys.path.append(dir)
+    from constants import * 
+    print(f"total files in library: { len(os.listdir(dir))} {sys.path}")
+else :
+    print("library files missing")
 
 class App:
     def __init__(self) -> None:
         self._running = True
         self._display_surf = None
         self.size = self.weight, self.height = 640, 400
-        self.clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock() 
 
     def on_init(self):
         pygame.init()
@@ -28,8 +33,7 @@ class App:
         pass
 
     def on_render(self):
-        self._title = "Pygame Jam 2023"
-        pygame.display.set_caption(self._title)
+        pygame.display.set_caption(TITLE)
         self._display_surf.fill(BLUE)
         pygame.display.flip()
 
