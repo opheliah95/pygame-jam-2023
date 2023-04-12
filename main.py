@@ -26,6 +26,7 @@ class App:
         self.fps_renderer = fps_renderer
         self.particles = particles
 
+    @profile
     def on_init(self):
         pygame.init()
         self._display_surf = pygame.display.set_mode(
