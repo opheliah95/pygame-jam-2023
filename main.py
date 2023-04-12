@@ -8,6 +8,7 @@ if os.listdir(dir):
     sys.path.append(dir)
     from constants import *
     from clock import *
+    from particles import *
 
     print(f"total files in library: { len(os.listdir(dir))} {sys.path}")
 else:
@@ -15,12 +16,15 @@ else:
 
 
 class App:
-    def __init__(self, clock: Clock, fps_renderer: FPS_Renderer) -> None:
+    def __init__(
+        self, clock: Clock, fps_renderer: FPS_Renderer, particles: ParticleSystem
+    ) -> None:
         self._running = True
         self._display_surf = None
         self.size = self.weight, self.height = SCREEN_WIDTH, SCREEN_HEIGHT
         self.clock = clock
         self.fps_renderer = fps_renderer
+        self.particles = particles
 
     def on_init(self):
         pygame.init()
@@ -40,6 +44,9 @@ class App:
         pygame.display.set_caption(TITLE)
         self._display_surf.fill(BLUE)
         self.fps_renderer.render(self._display_surf)
+        # create and display game elements
+        self.particles.generate_particles()
+        self.particles.draw_particle(self._display_surf)
         pygame.display.flip()
 
     def on_cleanup(self):
@@ -60,5 +67,6 @@ class App:
 if __name__ == "__main__":
     fps_clock: Clock = Clock()
     fps_renderer: FPS_Renderer = FPS_Renderer(fps_clock)
-    theApp = App(fps_clock, fps_renderer)
+    game_particle_system: ParticleSystem = ParticleSystem()
+    theApp = App(fps_clock, fps_renderer, game_particle_system)
     theApp.on_execute()
