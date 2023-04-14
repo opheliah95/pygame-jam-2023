@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import sys, os
+import asyncio
 
 dir = f"{os.getcwd()}/lib"
 pixel_location = []
@@ -56,11 +57,11 @@ class App:
             if event.buttons[0] == 1:
                 if pos not in pixel_location:
                     pixel_location.append(pos)
-                if pos in erase_location:
-                    erase_location.remove(pos)
+                erase_location[:] = [loc for loc in erase_location if pygame.math.Vector2(pos).distance_to(pygame.math.Vector2(loc)) > 10]
             if event.buttons[2] == 1:
                 if pos not in erase_location:
                     erase_location.append(pos)
+                pixel_location[:] = [loc for loc in pixel_location if pygame.math.Vector2(pos).distance_to(pygame.math.Vector2(loc)) > 10]
                 self.erasing = True
 
     def on_loop(self):
@@ -92,10 +93,20 @@ class App:
 
         self.on_cleanup()
 
-
-if __name__ == "__main__":
+# thanks chatgpt
+async def async_main():
     fps_clock: Clock = Clock()
     fps_renderer: FPS_Renderer = FPS_Renderer(fps_clock)
     game_particle_system: ParticleSystem = ParticleSystem()
     theApp = App(fps_clock, fps_renderer, game_particle_system)
     theApp.on_execute()
+
+if __name__ == "__main__":
+   # Create event loop
+    loop = asyncio.get_event_loop()
+
+    # Run async function in event loop
+    loop.run_until_complete(async_main())
+
+    # Close event loop
+    loop.close()
