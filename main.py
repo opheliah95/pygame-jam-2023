@@ -3,7 +3,7 @@ from pygame.locals import *
 import sys, os
 
 dir = f"{os.getcwd()}/lib"
-
+pixel_location = []
 if os.listdir(dir):
     sys.path.append(dir)
     from constants import *
@@ -14,6 +14,12 @@ if os.listdir(dir):
 else:
     print("library files missing")
 
+def draw_saved_strokes(display:pygame.Surface):
+    for loc in pixel_location:
+        # print(f'drawing:{loc}')
+        rect = Rect((loc[0], loc[1], 10,10))
+        pygame.draw.rect(surface=display, rect=rect, color=GREEN)
+        # pygame.draw.circle(display, GREEN, radius=5, center=loc)
 
 class App:
     def __init__(
@@ -37,6 +43,9 @@ class App:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == LEFT_CLICK:
+                pixel_location.append(pygame.mouse.get_pos())
 
     def on_loop(self):
         pass
@@ -48,6 +57,7 @@ class App:
         # create and display game elements
         self.particles.generate_particles()
         self.particles.draw_particle(self._display_surf)
+        draw_saved_strokes(self._display_surf)
         pygame.display.flip()
 
     def on_cleanup(self):
@@ -58,10 +68,11 @@ class App:
             self._running = False
         while self._running:
             self.clock.set_tick()
+            self.on_render()
             for event in pygame.event.get():
                 self.on_event(event)
                 self.on_loop()
-                self.on_render()
+
         self.on_cleanup()
 
 

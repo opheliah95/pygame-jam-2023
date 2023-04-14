@@ -11,7 +11,7 @@ def memorize(func):
     cache = {}
 
     def wrapper(*args, **kwargs):
-        print(*args)
+        # print(*args)
         key = str(*args) + str(kwargs)
 
         func(*args, **kwargs)
@@ -23,7 +23,7 @@ def memorize(func):
 
 class Particle:
     def __init__(self) -> None:
-        self.loc = [random.randint(0, 100), random.randint(0, 100)]
+        self.loc = [random.randint(100, 300), random.randint(100, 300)]
         self.color = BLUE
         self.x_velocity = random.randint(0, 20) / 10 - 1
         self.y_velocity = -1  # x and y value
@@ -37,11 +37,10 @@ class ParticleSystem:
 
     def generate_particles(self):
         for _ in itertools.repeat(None, self.count):
-            print(f"Particle {_} has been added")
+            # print(f"Particle {_} has been added")
             p = Particle()
             self.particles_list.append(p)
 
-    @profile
     def draw_particle(self, display: pygame.Surface):
         self.update_particles()
         self.render_particle(display)
