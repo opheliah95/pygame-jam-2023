@@ -4,6 +4,8 @@ import sys, os
 
 dir = f"{os.getcwd()}/lib"
 pixel_location = []
+erase_location = []
+is_erasing = False
 if os.listdir(dir):
     sys.path.append(dir)
     from constants import *
@@ -21,6 +23,11 @@ def draw_saved_strokes(display:pygame.Surface):
         pygame.draw.rect(surface=display, rect=rect, color=GREEN)
         # pygame.draw.circle(display, GREEN, radius=5, center=loc)
 
+def draw_erase_strokes(display:pygame.Surface):
+    for loc in erase_location:
+        rect = Rect((loc[0], loc[1], 10,10))
+        pygame.draw.rect(surface=display, rect=rect, color=BLUE)
+
 class App:
     def __init__(
         self, clock: Clock, fps_renderer: FPS_Renderer, particles: ParticleSystem
@@ -31,6 +38,7 @@ class App:
         self.clock = clock
         self.fps_renderer = fps_renderer
         self.particles = particles
+        self.erasing = False
 
     @profile
     def on_init(self):
@@ -43,9 +51,17 @@ class App:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == LEFT_CLICK:
-                pixel_location.append(pygame.mouse.get_pos())
+        if event.type == pygame.MOUSEMOTION:
+            pos: tuple(int, int) = pygame.mouse.get_pos()
+            if event.buttons[0] == 1:
+                if pos not in pixel_location:
+                    pixel_location.append(pos)
+                if pos in erase_location:
+                    erase_location.remove(pos)
+            if event.buttons[2] == 1:
+                if pos not in erase_location:
+                    erase_location.append(pos)
+                self.erasing = True
 
     def on_loop(self):
         pass
@@ -58,7 +74,8 @@ class App:
         self.particles.generate_particles()
         self.particles.draw_particle(self._display_surf)
         draw_saved_strokes(self._display_surf)
-        pygame.display.flip()
+        draw_erase_strokes(self._display_surf)
+        pygame.display.update()
 
     def on_cleanup(self):
         pygame.quit()
