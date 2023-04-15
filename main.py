@@ -54,10 +54,14 @@ class App:
         if event.type == pygame.MOUSEMOTION:
             pos: tuple(int, int) = pygame.mouse.get_pos()
             if event.buttons[0] == 1:
+                # create and display game elements
+                self.particles.generate_particles()
                 if pos not in pixel_location:
                     pixel_location.append(pos)
                 erase_location[:] = [loc for loc in erase_location if pygame.math.Vector2(pos).distance_to(pygame.math.Vector2(loc)) > 10]
             if event.buttons[2] == 1:
+                # create and display game elements
+                self.particles.generate_particles()
                 if pos not in erase_location:
                     erase_location.append(pos)
                 pixel_location[:] = [loc for loc in pixel_location if pygame.math.Vector2(pos).distance_to(pygame.math.Vector2(loc)) > 10]
@@ -70,8 +74,6 @@ class App:
         pygame.display.set_caption(TITLE)
         self._display_surf.fill(BLUE)
         self.fps_renderer.render(self._display_surf)
-        # create and display game elements
-        self.particles.generate_particles()
         self.particles.draw_particle(self._display_surf)
         draw_saved_strokes(self._display_surf)
         draw_erase_strokes(self._display_surf)
@@ -98,8 +100,6 @@ fps_renderer: FPS_Renderer = FPS_Renderer(fps_clock)
 game_particle_system: ParticleSystem = ParticleSystem()
 theApp = App(fps_clock, fps_renderer, game_particle_system)
 theApp.on_init()
-# thanks chatgpt
-
 
 async def main():
     while theApp._running:
