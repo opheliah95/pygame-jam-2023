@@ -41,7 +41,6 @@ class App:
         self.particles = particles
         self.erasing = False
 
-    @profile
     def on_init(self):
         pygame.init()
         self._display_surf = pygame.display.set_mode(
@@ -77,7 +76,7 @@ class App:
         draw_saved_strokes(self._display_surf)
         draw_erase_strokes(self._display_surf)
         pygame.display.update()
-
+        
     def on_cleanup(self):
         pygame.quit()
 
@@ -93,20 +92,24 @@ class App:
 
         self.on_cleanup()
 
+
+fps_clock: Clock = Clock()
+fps_renderer: FPS_Renderer = FPS_Renderer(fps_clock)
+game_particle_system: ParticleSystem = ParticleSystem()
+theApp = App(fps_clock, fps_renderer, game_particle_system)
+theApp.on_init()
 # thanks chatgpt
-async def async_main():
-    fps_clock: Clock = Clock()
-    fps_renderer: FPS_Renderer = FPS_Renderer(fps_clock)
-    game_particle_system: ParticleSystem = ParticleSystem()
-    theApp = App(fps_clock, fps_renderer, game_particle_system)
-    theApp.on_execute()
 
-if __name__ == "__main__":
-   # Create event loop
-    loop = asyncio.get_event_loop()
 
-    # Run async function in event loop
-    loop.run_until_complete(async_main())
+async def main():
+    while theApp._running:
+        theApp.clock.set_tick()
+        theApp.on_render()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                theApp.on_cleanup()
+        
+        await asyncio.sleep(0) 
 
-    # Close event loop
-    loop.close()
+
+asyncio.run(main())

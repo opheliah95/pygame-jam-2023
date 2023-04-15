@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import *
 from constants import *
 import random, itertools
-from memory_profiler import profile
 
 pygame.init()
 
