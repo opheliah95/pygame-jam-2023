@@ -29,6 +29,11 @@ def draw_erase_strokes(display:pygame.Surface):
         rect = Rect((loc[0], loc[1], 10,10))
         pygame.draw.rect(surface=display, rect=rect, color=CANVAS)
 
+def draw_instruction (display:pygame.Surface):
+    font = pygame.font.SysFont('arial', 15)
+    text = font.render(INSTRUCTION, True, BLUE)
+    text_rect = text.get_rect(center=(SCREEN_WIDTH/2, 40))
+    display.blit(text, text_rect)
 class App:
     def __init__(
         self, clock: Clock, fps_renderer: FPS_Renderer, particles: ParticleSystem
@@ -73,6 +78,7 @@ class App:
     def on_render(self):
         pygame.display.set_caption(TITLE)
         self._display_surf.fill(CANVAS)
+        draw_instruction(self._display_surf)
         self.fps_renderer.render(self._display_surf)
         self.particles.draw_particle(self._display_surf)
         draw_saved_strokes(self._display_surf)

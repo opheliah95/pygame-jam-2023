@@ -21,13 +21,13 @@ class Clock:
 class FPS_Renderer:
     def __init__(self, clock: Clock) -> None:
         self.game_clock = clock
-        self.font = pygame.font.SysFont("Ariel", 35)
+        self.font = pygame.font.SysFont("Ariel", 25)
         self.text = self.font.render(
             str(round(self.game_clock.update_fps(), 2)), True, WHITE
         )
 
     def render(self, display: pygame.Surface):
         self.text = self.font.render(
-            str(round(self.game_clock.update_fps(), 2)), True, WHITE
+            f'FPS: {str(round(self.game_clock.update_fps(), 2))}', True, BLUE
         )
-        display.blit(self.text, (SCREEN_WIDTH * 0.9, SCREEN_HEIGHT * 0.9))
+        display.blit(self.text, (SCREEN_WIDTH * 0.85, SCREEN_HEIGHT * 0.9))
