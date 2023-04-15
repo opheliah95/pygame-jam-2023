@@ -1,0 +1,10 @@
+[project]
+name = "pygame-easter-jam-particle-drawing"
+version = "0.0"
+description = "PyGame Easter 2023!"
+
+[tool.distutils.build_exe]
+excludes = ["tkinter", "unittest"]
+packages = ["pygame"]
+zip_include_packages = ["lib/"]
+

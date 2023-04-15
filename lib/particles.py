@@ -36,7 +36,7 @@ class ParticleSystem:
 
     def generate_particles(self, color=WHITE):
         for _ in itertools.repeat(None, self.count):
-            print(f"Particle {_} has been added")
+            #print(f"Particle {_} has been added")
             p = Particle(color)
             self.particles_list.append(p)
 
