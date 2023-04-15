@@ -50,7 +50,7 @@ class App:
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
-            self._running = False
+            self.on_cleanup()
         if event.type == pygame.MOUSEMOTION:
             pos: tuple(int, int) = pygame.mouse.get_pos()
             if event.buttons[0] == 1:
@@ -106,9 +106,8 @@ async def main():
         theApp.clock.set_tick()
         theApp.on_render()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                theApp.on_cleanup()
-        
+                theApp.on_event(event)
+                theApp.on_loop()
         await asyncio.sleep(0) 
 
 
