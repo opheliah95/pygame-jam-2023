@@ -2,8 +2,9 @@
 from cx_Freeze import setup, Executable
 
 
-executables = [Executable("main.py")]
+executables = [Executable(script = "main.py", target_name="PygameEasterJam")]
 build_exe_options = {
+    "build_exe": "PyGame_Easter_Jam",
     "packages" : ['pygame'],
     "include_files" : ["lib/"]
 }
