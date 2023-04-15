@@ -27,7 +27,7 @@ def draw_saved_strokes(display:pygame.Surface):
 def draw_erase_strokes(display:pygame.Surface):
     for loc in erase_location:
         rect = Rect((loc[0], loc[1], 10,10))
-        pygame.draw.rect(surface=display, rect=rect, color=BLUE)
+        pygame.draw.rect(surface=display, rect=rect, color=CANVAS)
 
 class App:
     def __init__(
@@ -55,7 +55,7 @@ class App:
             pos: tuple(int, int) = pygame.mouse.get_pos()
             if event.buttons[0] == 1:
                 # create and display game elements
-                self.particles.generate_particles()
+                self.particles.generate_particles(GREEN)
                 if pos not in pixel_location:
                     pixel_location.append(pos)
                 erase_location[:] = [loc for loc in erase_location if pygame.math.Vector2(pos).distance_to(pygame.math.Vector2(loc)) > 10]
@@ -72,7 +72,7 @@ class App:
 
     def on_render(self):
         pygame.display.set_caption(TITLE)
-        self._display_surf.fill(BLUE)
+        self._display_surf.fill(CANVAS)
         self.fps_renderer.render(self._display_surf)
         self.particles.draw_particle(self._display_surf)
         draw_saved_strokes(self._display_surf)

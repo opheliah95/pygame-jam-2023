@@ -21,9 +21,9 @@ def memorize(func):
 
 
 class Particle:
-    def __init__(self) -> None:
+    def __init__(self, color=WHITE) -> None:
         self.loc = list(pygame.mouse.get_pos())
-        self.color = BLUE
+        self.color = color
         self.x_velocity = random.randint(0, 20) / 10 - 1
         self.y_velocity = -1  # x and y value
         self.time_to_live = random.randint(2, 5)
@@ -34,10 +34,10 @@ class ParticleSystem:
         self.particles_list = []
         self.count = particles_count
 
-    def generate_particles(self):
+    def generate_particles(self, color=WHITE):
         for _ in itertools.repeat(None, self.count):
             print(f"Particle {_} has been added")
-            p = Particle()
+            p = Particle(color)
             self.particles_list.append(p)
 
     def draw_particle(self, display: pygame.Surface):
@@ -47,7 +47,7 @@ class ParticleSystem:
     def render_particle(self, display: pygame.Surface):
         p: Particle
         for p in self.particles_list:
-            pygame.draw.circle(display, WHITE, radius=p.time_to_live, center=p.loc)
+            pygame.draw.circle(display, p.color, radius=p.time_to_live, center=p.loc)
 
     @memorize
     def update_particles(self):
